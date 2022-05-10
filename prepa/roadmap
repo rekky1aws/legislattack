@@ -1,0 +1,16 @@
+ # Arrière Plan
+Chaque joueur (assimilé à un parti) a de la monnaie et des ponts de popularité.
+Il y a un magasin, acessible entre chaque combat qui permet d'acheter des objets.
+Les pots de vin permettent de gagner plus facilement un combat (boost les attaques).
+Au repos, les barres de vie se remplissent petit à petit.
+
+
+
+ # Utilisation
+On choisit un camp sur les 9 proposés que l'ont fera combattre contre les 8 autres.
+Entre chaque combat on peut ouvrir le magasin et y acheter un ou des objets si l'on a assez de monnaie.
+
+ # Magasin
+Au magasin il y a plusieurs objets :
+	- Différents Niveaux de Soins
+	- Différents niveaux de Pots de Vin

@@ -1,0 +1,6 @@
+body * {
+	border: 1px solid black;
+	min-width: 30px;
+	padding: 5px;
+	margin: 5px;
+}
