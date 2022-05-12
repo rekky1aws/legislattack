@@ -1,63 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html class="scroll-smooth snap-y">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://unpkg.com/vue@3"></script>
+	<script type="text/javascript" src="/script/classes.js"></script>
+	<script type="text/javascript" src="/script/app.js"></script>
+	<link rel="stylesheet" type="text/css" href="/style/style.css">
 	<title>Test</title>
 </head>
-<body>
-	<div class="header w-screen m-0 bg-stone-200 p-4 fixed">
-		<h1 class="text-center text-2xl font-bold">Titre</h1>
+<body onload="loader();" class="overflow-hidden">
+	<div class="header w-full m-0 bg-white shadow-xl fixed z-10">
+		<div class="flag h-full w-16 md:w-32 absolute flex flex-row -left-2 z-10">
+			<div class="flag-part bg-blue-800 w-1/3 h-full -skew-x-12"></div>
+			<div class="flag-part bg-white w-1/3 h-full -skew-x-12"></div>
+			<div class="flag-part bg-red-500 w-1/3 h-full -skew-x-12"></div>
+		</div>
+		<h1 class="text-center text-2xl font-extrabold italic my-4 font-serif tracking-wide z-20">Legislattack</h1>
 	</div>
 
-	<div class="screen h-screen pt-16">
-		CHOIX
-		<h2>Choix du Parti</h2>
-		<div class="grid">
-			grille pour les combattants
+	<div class="screen h-screen pt-20 snap-start" id="choice">
+		<h2 class="font-bold text-center text-xl">Choix du Parti</h2>
+		<div class="grid grid-cols-3 grid-rows-3 mx-8 mb-4 gap-4 max-h-full" id="choice-grid">
+
 		</div>
-		<button>Valider</button>
+		<div id="chosen-fighter-display" class="text-center font-bold w-full">
+			
+		</div>
+		<div class="flex justify-center w-full absolute -bottom-4 my-16">
+			<div class="bg-green-500 py-2 px-4 text-white rounded-full hover:scale-105 active:scale-90 relative -bottom-10" onclick="startFight();">Valider</div>
+		</div>
+		<div id="no-fighter-msg" class="fixed bottom-0 bg-red-500 text-white m-8 p-4 rounded-full ease-in-out text-center duration-300">Veuillez choisir un parti avant de valider</div>
 	</div>
 
-	<div class="screen">
-		COMBAT
-		<div class="combat-zone">
-			<div class="hp-bar">
-				Conteneur Barre de Vie
-				<div class="hp">Barre de Vie</div>
+	<div class="screen w-full h-screen pt-20 snap-y snap-start" id="combat">
+		<h2 class="font-bold uppercase text-center text-xl">Combat</h2>
+		<div class="combat-zone mb-8">
+			<div id="foe-name" class="text-right pr-10 uppercase -skew-x-6 font-bold">ENNEMI</div>
+			<div class="hp-bar bg-black h-8 rounded-full mx-4 my-2 border-4 border-black overflow-hidden">
+				<div id="foe-hp" class="hp h-full bg-red-500 rounded-full float-right ease-in-out duration-500"></div>
 			</div>
-			<div class="fighter-img-container">
-				Image combattant
-				<img src="" alt="X">
+			<div class="grid grid-cols-2 gap-4 mx-4 place-content-evenly">
+				<div class="flex justify-center">
+					<div class="fighter-img-container mt-8 -scale-x-100 skew-x-6 border-black border-4 rounded-2xl overflow-hidden aspect-square max-w-md">
+						<img src="" alt="Image du Joueur" id="player-image" class="w-full h-full rounded-2xl object-contain bg-white border-2 border-black ease-in duration-200 blur-sm">
+					</div>
+				</div class="flex justify-center">
+				<div>
+					<div class="fighter-img-container mb-8 -skew-x-6 border-black border-4 rounded-2xl overflow-hidden aspect-square max-w-md">
+						<img src="" alt="Image de l'adversaire" id="foe-image" class="w-full h-full object-contain bg-white ease-in duration-200">
+					</div>
+				</div>
 			</div>
-			<div class="fighter-img-container">
-				Image combattant
-				<img src="" alt="X">
+			<div class="hp-bar bg-black h-8 rounded-full mx-4 my-2 border-4 border-black overflow-hidden">
+				<div id="player-hp" class="hp bg-blue-800 h-full rounded-full ease-in-out duration-500"></div>
 			</div>
-			<div class="hp-bar">
-				Conteneur Barre de Vie
-				<div class="hp">Barre de Vie</div>
-			</div>
+			<div id="player-name" class="pl-10 uppercase skew-x-6 font-bold">JOUEUR</div>
 		</div>
+		
+		<div id="money-disp" class="text-center m-4">$</div>
 
-		<div class="attack-menu">
-			<button>Attaquer</button>
-			<button>Shop</button>
-		</div>
-		<div class="info-bar">
-			<div class="money">$</div>
-			<button>Magasin</button>
+		<div class="attack-menu flex w-full justify-center gap-2">
+
+			<button onclick="launchAttackPhase();" class="p-4 bg-blue-800 text-white rounded-full hover:scale-105 active:scale-90">Attaquer</button>
+			<button class="p-4 bg-blue-800 text-white rounded-full hover:scale-105 active:scale-90" onclick="jump('')">Shop</button>
+
 		</div>
 	</div>
 
-	<div class="screen">
-		<h2>SHOP</h2>
-		<div class="grid">
+	<div class="screen snap-start w-full h-screen pt-20">
+		<h2 class="text-center font-bold">Magasin</h2>
+		<div id="shop-grid" class="grid">
 			grille pour les items du shop
 		</div>
-		<button>Valider</button>
+		<div id="chosen-item">
+			
+		</div>
+		<div class="flex justify-center w-full bottom-12 my-16">
+			<a href="#combat">
+				<div class="bg-green-500 py-2 px-4 text-white rounded-full">Valider</div>
+			</a>
+		</div>
 	</div>
 </body>
 </html>
