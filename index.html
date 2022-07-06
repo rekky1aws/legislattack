@@ -4,13 +4,14 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://cdn.tailwindcss.com"></script>
-	<script src="https://unpkg.com/vue@3"></script>
 	<script type="text/javascript" src="/script/classes.js"></script>
+	<script type="text/javascript" src="/script/itemsEffects.js"></script>
 	<script type="text/javascript" src="/script/app.js"></script>
+	<script type="text/javascript" src="/script/updatePopUp.js"></script>
 	<link rel="stylesheet" type="text/css" href="/style/style.css">
-	<title>Test</title>
+	<title>Legislattack</title>
 </head>
-<body onload="loader();" class="overflow-hidden">
+<body onload="loader();" class=""> <!-- overflow-hidden -->
 	<div class="header w-full m-0 bg-white shadow-xl fixed z-10">
 		<div class="flag h-full w-16 md:w-32 absolute flex flex-row -left-2 z-10">
 			<div class="flag-part bg-blue-800 w-1/3 h-full -skew-x-12"></div>
@@ -43,12 +44,12 @@
 			</div>
 			<div class="grid grid-cols-2 gap-4 mx-4 place-content-evenly">
 				<div class="flex justify-center">
-					<div class="fighter-img-container mt-8 -scale-x-100 skew-x-6 border-black border-4 rounded-2xl overflow-hidden aspect-square max-w-md">
+					<div class="fighter-img-container mt-8 -scale-x-100 skew-x-6 border-black border-4 rounded-2xl overflow-hidden aspect-square max-w-md bg-black">
 						<img src="" alt="Image du Joueur" id="player-image" class="w-full h-full rounded-2xl object-contain bg-white border-2 border-black ease-in duration-200 blur-sm">
 					</div>
 				</div class="flex justify-center">
 				<div>
-					<div class="fighter-img-container mb-8 -skew-x-6 border-black border-4 rounded-2xl overflow-hidden aspect-square max-w-md">
+					<div class="fighter-img-container mb-8 -skew-x-6 border-black border-4 rounded-2xl overflow-hidden aspect-square max-w-md bg-blue-500">
 						<img src="" alt="Image de l'adversaire" id="foe-image" class="w-full h-full object-contain bg-white ease-in duration-200">
 					</div>
 				</div>
@@ -59,28 +60,54 @@
 			<div id="player-name" class="pl-10 uppercase skew-x-6 font-bold">JOUEUR</div>
 		</div>
 		
-		<div id="money-disp" class="text-center m-4">$</div>
+		<div id="money-disp-fight" class="text-center m-4">$</div>
 
-		<div class="attack-menu flex w-full justify-center gap-2">
+		<div class="attack-menu flex w-full justify-evenly gap-2">
 
-			<button onclick="launchAttackPhase();" class="p-4 bg-blue-800 text-white rounded-full hover:scale-105 active:scale-90">Attaquer</button>
-			<button class="p-4 bg-blue-800 text-white rounded-full hover:scale-105 active:scale-90" onclick="jump('')">Shop</button>
+			<button onclick="useItem();" class="p-4 bg-blue-800 text-white rounded-full hover:scale-105 active:scale-90 font-bold">Utiliser objet</button>
+			<button onclick="launchAttackPhase();" class="p-4 bg-blue-800 text-white rounded-full hover:scale-105 active:scale-90 font-bold">Attaquer</button>
+			<button class="p-4 bg-blue-800 text-white rounded-full hover:scale-105 active:scale-90 font-bold" onclick="jump('shop')">Shop</button>
 
 		</div>
 	</div>
 
-	<div class="screen snap-start w-full h-screen pt-20">
+	<div class="screen snap-start w-full h-screen pt-20 h-full" id="shop">
 		<h2 class="text-center font-bold">Magasin</h2>
-		<div id="shop-grid" class="grid">
-			grille pour les items du shop
+		<div id="shop-grid" class="grid grid-cols-3 gap-2">
+
 		</div>
 		<div id="chosen-item">
 			
 		</div>
 		<div class="flex justify-center w-full bottom-12 my-16">
-			<a href="#combat">
-				<div class="bg-green-500 py-2 px-4 text-white rounded-full">Valider</div>
-			</a>
+			<a onclick="hideErrorMessages();" class="bg-black m-2 py-2 px-4 text-white rounded-full active:scale-90" href="#combat">Retourner au combat</a>
+			<div class="bg-green-500 m-2 py-2 px-4 text-white rounded-full active:scale-90" onclick="validateItem();">Valider</div>
+		</div>
+
+		<div id="money-disp-shop" class="text-center m-4">$</div>
+		<div id="chosen-item-display" class="p-4 bg-blue-800 relative text-white rounded-xl left-0 bottom-0 m-auto flex flex-col w-64 h-64 justify-center items-center gap-5">
+			SELECTED ITEM
+		</div>
+
+		<!-- ERROR MESSAGES -->
+		<div class="flex flex-col fixed right-0 bottom-0 ease-in-out duration-300">
+			<div id="no-item-msg" class="p-4 bg-red-500 rounded-full text-white m-2 hidden ease-in-out duration-200 text-center">Veuillez selectionner un item</div>
+			<div id="no-money-msg" class="p-4 bg-red-500 rounded-full text-white m-2 hidden ease-in-out duration-200 text-center">Vous n'avez pas assez d'argent</div>
+			<div id="no-space-msg" class="p-4 bg-red-500 rounded-full text-white m-2 hidden ease-in-out duration-200 text-center">Vous avez deja un item dans votre inventaire</div>	
+		</div>
+	</div>
+
+	<div id="update-info" class="fixed bottom-0 w-full md:w-64 ease-in-out duration-300">
+		<div class="m-4 bg-yellow-300 rounded-xl p-4">
+			<img class="w-8 h-8 rounded-full bg-white p-2 right-0 absolute top-0 m-2 active:scale-90" onclick="hidePopUp();" src="/images/cross.png">
+			<div class="flex flex-col gap-4 justify-center align-center m-4">
+				<div class="text-center font-bold text-xl">Version Beta :</div>
+				<ul>
+					<li class="text-center">3 Combattants</li>
+					<li class="text-center">3 Items</li>
+					<li class="text-center">Gestion de l'argent</li>
+				</ul>
+			</div>			
 		</div>
 	</div>
 </body>
